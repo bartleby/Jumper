@@ -5,9 +5,7 @@
 ---
 
 Simple, powerful and elegant implementation of the Coordinator pattern in Swift for UIKit
-> Написать `Jumper` меня вдохновила библиотека [Stinsen](https://github.com/rundfunk47/stinsen) написанная под `SwiftUI` 
-> 
-> Мне очень понравился его подход к реализации патерна  `Coordinator` и я перенес этот подход в `UIKit`.
+
 
 ## Installation
 
@@ -239,10 +237,42 @@ coordinator
     .present(\.todoEditor)
 ```
 
+каждый переход, если это переход на координатор, возвращает координатор перехода, если это переход на вью, то возвращается текущий координатор.
+
+
+Наприимер:
+В координаторе `SettingsCoordinator` есть два перехода:
+
+```swift
+final class SettingsCoordinator: NavigationCoordinable {
+    
+    //...
+    
+    @Route var rateApp = rateAppScreen
+    @Route var notification = notificationScreen
+
+    func rateAppScreen() -> ScreenView {
+        RateAppViewController()
+    }
+    
+    func notificationScreen() -> NotificationCoordinator {
+        NotificationCoordinator()
+    }
+}
+```
+
+```swift
+coordinator.present(\.rateApp) \\ вернет SettingsCoordinator
+coordinator.present(\.notification) \\ вернет NotificationCoordinator
+```
+
+
 ### Deep Linking
 
 
 
 ## Demo project
+
+
 
 ## License
