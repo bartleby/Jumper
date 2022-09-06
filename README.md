@@ -109,9 +109,9 @@ final class AuthorizationCoordinator: NavigationCoordinable {
 * `push(stack: )` 
 * `pop(\.someRoute)`
 * `pop(\.someRoute, animated: false)`
-* `pop(to: \.someRoute)` переход к указаному `Route`
+* `pop(to: \.someRoute)` going to the specified `Route`
 * `pop(to: \.someRoute, animated: false)`
-* `popToRoot()` переход в начала стека
+* `popToRoot()`
 * `popToRoot(animated: false)`
 * `present(\.someRoute)`
 * `present(\.someRoute, input: "any type")`
