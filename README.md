@@ -4,7 +4,7 @@
 
 ---
 
-Simple, powerful and elegant implementation of the Coordinator pattern in Swift for UIKit
+Простая, мощная и элегантная реализация шаблона координатора в Swift для UIKit
 
 
 ## Installation
@@ -15,7 +15,7 @@ Simple, powerful and elegant implementation of the Coordinator pattern in Swift 
 https://github.com/bartleby/Jumper.git
 ```
 
-## How to use Jumper
+## Как использовать Jumper
 
 ### Coordinators
 
