@@ -4,7 +4,7 @@
 
 ---
 
-Простая, мощная и элегантная реализация шаблона координатора в Swift для UIKit
+A simple, powerful and elegant implementation of the coordinator template in Swift for UIKit
 
 
 ## Installation
@@ -15,16 +15,16 @@
 https://github.com/bartleby/Jumper.git
 ```
 
-## Как использовать Jumper
+## How to use Jumper
 
 ### Coordinators
 
-Jumper из коробки имеет три вида протоколов координатора, которые могут реализовать ваши координаторы:
-> Вы так же можете реализовать свой собственный координатор, смотрите исходный код.
+Jumper out of the box has three kinds of coordinator protocols that your coordinators can implement:
+> You can also implement your own coordinator, see the source code.
 
-* `RootCoordinable` - Является контейнером `UIViewController`, отлично подходит для стартовой логикии в вашем приложении.
-* `NavigationCoordinable` - Используется для навигации по стеку
-* `TabCoordinable` - Реализует `UITabBarController`
+* `RootCoordinable` - It is a `UIViewController` container, great for starting logic in your application.
+* `NavigationCoordinable` - Used for stack navigation
+* `TabCoordinable` - Implements 'UITabBarController`
 
 ### RootCoordinable
 
@@ -50,23 +50,23 @@ final class AppCoordinator: RootCoordinable {
 
 ```
 
-В этом примере создается `AppCoordinator` который реализует `RootCoordinable` протокол
-- Шаг 1 - Вы должны реализовать `navigation` проперти и инициализировать ее c `Route` по умолчанию
-- Шаг 2 - Инициализация переходов, задается с помощью ключевого слова `@Route` который должен указывать на функцию создания `View` или другого `Coordinator`a для перехода
-- Шаг 3 - Реализация методов на кототые ссылаются `Route`
+In this example, an `AppCoordinator` is created that implements the `RootCoordinable` protocol
+- Step 1 - You have to implement the `navigation` property and initialize it with `Route` by default
+- Step 2 - Initialization of transitions, set using the keyword `@Route` which should indicate the function of creating a `View` or another `Coordinator` for the transition
+- Step 3 - Implementation of methods referenced by `Route`
 
-#### Список методов перехода
+#### List of transition methods
 
-* `root(\.someRoute)` Заменяет текущее представлениие или координатор
+* `root(\.someRoute)` Replaces the current view or coordinator
 * `root(\.someRoute, input: "any type")`
-* `isRoot(\.someRoute)` Возвращает булево значение, которое указывает, является ли данный `Route` корневым
-* `hasRoot(\.someRoute)` Возвращает корневой координатор или nil если указаный `Route` не является корневым
-* `present(\.someRoute)` Презентует вью или координатор
+* `isRoot(\.someRoute)` Returns a boolean value that indicates whether the given `Route` is root
+* `hasRoot(\.someRoute)` Returns the root coordinator or nil if the specified `Route` is not root
+* `present(\.someRoute)` Is presented by a view or coordinator
 * `present(\.someRoute, input: "any type")`
 * `present(\.someRoute, input: "any type", animated: false)`
-* `dismiss()`
+* `dismiss()` Dismiss the current Coordinator
 
-В каждый метод перехода вы можете передать аргумент, используя поле `input`, который будет передан в функциию создания вью/координатора
+You can pass an argument to each transition method using the `input` field, which will be passed to the view/coordinator creation function.
 
 ```swift
 @Route var userList = userListScreen
@@ -75,7 +75,7 @@ func userListScreen(listData: [User]) -> UserListCoordinator {
     UserListCoordinator(data: listData)
 }
 ```
-вызов такого перехода будет выглядеть так
+calling such a transition will look like this
 
 ```swift
 coordinator.present(\.userList, input: userListData)
@@ -101,7 +101,7 @@ final class AuthorizationCoordinator: NavigationCoordinable {
 }
 ```
 
-#### Список методов перехода
+#### List of transition methods
 
 * `push(\.someRoute)`
 * `push(\.someRoute, input: "any type")`
@@ -116,12 +116,12 @@ final class AuthorizationCoordinator: NavigationCoordinable {
 * `present(\.someRoute)`
 * `present(\.someRoute, input: "any type")`
 * `present(\.someRoute, input: "any type", animated: false)`
-* `dismiss()`
+* `dismiss()` Dismiss the current Coordinator
 
-используя метод `push(stack:)` вы можете сделать `push` сразу нескольких `Route` в навигейшен стек, при этом анимация будет применена только для последнего перехода
+using the `push(stack:)` method you can `push` several `Routes` into the navigation stack at once, and the animation will be applied only for the last transition
 
 ```swift
-coordinator?.push {
+coordinator.push {
     \SettingsCoordinator.yellow
     \SettingsCoordinator.green
     \SettingsCoordinator.green
@@ -131,10 +131,10 @@ coordinator?.push {
 }
 ```
 
-тоже самое вы можете сделать при помощи цепочки `Route`
+you can do the same with the `Route` chain
 
 ```swift
-coordinator?
+coordinator
     .push(\.yellow, animated: false)
     .push(\.green, animated: false)
     .push(\.green, animated: false)
@@ -182,24 +182,24 @@ final class TabBarCoordinator: TabCoordinable {
     }
 }
 ```
-Тут все по аналогии с другими координаторами за небольшим исключениием, в @Route появляется новый аргумент, в который вы должны передать TabItem, и в инициализации `navigation` проперти, теперь передается список роутов которые будут являться табами
+Here everything is similar to other coordinators, with a small exception, a new argument appears in @Route, to which you must pass TabItem, and in the initialization of the `navigation` property, a list of routes that will be tabs is now passed
 
-* Шаг 1 - Инициализируйте `navigation` с несколькимии `Route` которые будут являться табами в таб баре
-* Шаг 2 - Определите `Route` указав в аргументе tabItem
-* Шаг 3 - Определите координаторы для переходов
-* Шаг 4 - Методы которые возвращают TabItem
+* Шаг 1 - Initialize `navigation` with several `Routes` that will be tabs in the tabbar
+* Шаг 2 - Define `Route` by specifying TabItem in the argument
+* Шаг 3 - Define the coordinators for transitions
+* Шаг 4 - Define the methods that will return TabItem's
 
-#### Список методов перехода
+#### List of transition methods
 
-* `focus(\.someTabRoute)` переход на таб 
-* `present(\.someRoute)` презентация `Route`
-* `dismiss()`
+* `focus(\.someTabRoute)` switching to tab 
+* `present(\.someRoute)` presentation of `Route`
+* `dismiss()` Dismiss the current Coordinator
 
 ### Alert's
-Для того, чтобы показать алерт и другие всплывающие элементы, через координатор, вы должны поддержать протокол `ScreenViewPresentable`
+In order to show the alert and other pop-up elements through the coordinator, you must support the `ScreenViewPresentable` protocol
 
-Например, создайте протокол `AlertCoordinable` и реализуйте в нем логику показа Алерта.
-Чтобы получить контроллер на который нужно показать всплывающий элемент, вызовете метод `view()`
+For example, create the `AlertCoordinable` protocol and implement the Alert display logic in it.
+To get the controller to which you want to show the popup element, call the `view()` method
 
 
 ` let controller = view() `
@@ -220,7 +220,8 @@ extension AlertCoordinable {
 }
 ```
 
-Теперь, если этот протокол указать вашему координатору, у него появится возможность отображать Алерты
+Implement the 'AlertCoordinable` protocol in the coordinator. 
+Now the coordinator has the opportunity to display an alert
 
 ```swift
 final class SettingsCoordinator: NavigationCoordinable, AlertCoordinable {
@@ -235,7 +236,7 @@ coordinator.presentAlert(title: "Title", message: "Message")
 
 ### Customizing
 
-Иногда вам может понадобится обратится к `UITabBarController`, `UINavigationController` или `UIViewController` контроллеру из вашего координатора, для этого есть метод `configure(controller: )`
+Sometimes you may need to access the `UITabBarController`, `UINavigationController` or `UIViewController` controller from your coordinator, there is a `configure(controller: )` method for this
 
 ```swift
 final class MainCoordinator: NavigationCoordinable {
@@ -243,7 +244,7 @@ final class MainCoordinator: NavigationCoordinable {
     //...
     
     func configure(controller: UINavigationController) {
-        // Customaize here
+        // Customize here
     }
 }
 ```
@@ -252,7 +253,7 @@ final class MainCoordinator: NavigationCoordinable {
 
 ### Chaining
 
-Одной из сильных сторон Jumper является объеденение переходов в цепочки 
+One of the strengths of `Jumper` is the integration of transitions into chains
 
 ```swift
 coordinator
@@ -262,11 +263,10 @@ coordinator
     .present(\.todoEditor)
 ```
 
-каждый переход, если это переход на координатор, возвращает координатор перехода, если это переход на вью, то возвращается текущий координатор.
+each transition, if it is a transition to the coordinator, returns the transition coordinator, if it is a transition to the view, then the current coordinator is returned.
 
-
-Наприимер:
-В координаторе `SettingsCoordinator` есть два перехода:
+For example:
+There are two transitions in the `SettingsCoordinator` coordinator:
 
 ```swift
 final class SettingsCoordinator: NavigationCoordinable {
@@ -287,14 +287,15 @@ final class SettingsCoordinator: NavigationCoordinable {
 ```
 
 ```swift
-coordinator.present(\.rateApp) \\ вернет SettingsCoordinator
-coordinator.present(\.notification) \\ вернет NotificationCoordinator
+coordinator.present(\.rateApp) \\ return SettingsCoordinator
+coordinator.present(\.notification) \\ return NotificationCoordinator
 ```
 
 
 ### Deep Linking
 
-Благодаря объеденению `Route` в цепочки вы получаете `DeepLink` из коробки, да их реализации, определите метод `scene(scene:, openURLContexts:)` в `SceneDelegate`
+By combining `Route` into chains, you get `DeepLink ` out of the box, to implement them, define the `scene(scene:, openURLContexts:)` method in `SceneDelegate`
+
 
 ```swift
 func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
@@ -302,7 +303,7 @@ func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>)
 }
 ```
 
-создайте метод `onOpenURL(url:)` в вашем главном координаторе 
+define the `onOpenURL(url:)` method in your app coordinator
 
 ```swift
 func onOpenURL(_ url: URL?) {
@@ -324,27 +325,26 @@ func onOpenURL(_ url: URL?) {
 }
 ```
 
-Реализацию `DeepLink` вы можете посмотреть в Demo проекте.
+You can see the implementation of `DeepLink` in the Demo project.
+
+To test the 'DeepLink ' use the terminal command `xcrun simctl openurl booted <url>`
+
+deep links that are configured in the Demo project
 
 
-Чтобы протестировать диплинкии используйте терминальную команду `xcrun simctl openurl booted <url>`
-
-в Demo проекте настроены следущие deeplink
-
-
-> Переход на таб Main
+> Switching to Main Tab
 > 
 > `xcrun simctl openurl booted jumper://io.idevs/home`
 
 
 
-> Переход на таб Settings
+> Switching to Settings Tab
 > 
 > `xcrun simctl openurl booted jumper://io.idevs/settings`
 
 
 
-> Открывает модальное окно и передает в него аргумент `hello-world`
+> Opens the modal view and passes the `hello-world` argument to it
 > 
 > `xcrun simctl openurl booted jumper://io.idevs/todo/hello-world`
 
@@ -353,7 +353,7 @@ func onOpenURL(_ url: URL?) {
 
 ## Demo project
 
-Скачайте демо проект из [репозитория](https://github.com/bartleby/Jumper-Demo.git)
+Download the demo project from [repository](https://github.com/bartleby/Jumper-Demo.git)
 
 
 ## License
