@@ -269,10 +269,69 @@ coordinator.present(\.notification) \\ вернет NotificationCoordinator
 
 ### Deep Linking
 
+Благодаря объеденению `Route` в цепочки вы получаете `DeepLink` из коробки, да их реализации, определите метод `scene(scene:, openURLContexts:)` в `SceneDelegate`
 
+```swift
+func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        appCoordinator.onOpenURL(URLContexts.first?.url)
+    }
+```
+
+создайте метод `onOpenURL(url:)` в вашем главном координаторе 
+
+```swift
+func onOpenURL(_ url: URL?) {
+        guard let url = url else { return }
+        guard let deepLink = try? DeepLink(url: url) else { return }
+        
+        if let coordinator = self.hasRoot(\.home) {
+            switch deepLink {
+            case .todo(let id):
+                coordinator
+                    .focus(\.main)
+                    .present(\.todo, input: id)
+            case .settings:
+                coordinator.focus(\.settings)
+            case .home:
+                coordinator.focus(\.main)
+            }
+        }
+    }
+```
+
+Реализацию `DeepLink` вы можете посмотреть в Demo проекте.
+
+
+Чтобы протестировать диплинкии используйте терминальную команду `xcrun simctl openurl booted <url>`
+
+в Demo проекте настроены следущие deeplink
+
+
+> Переход на таб Main
+> 
+> `xcrun simctl openurl booted jumper://io.idevs/home`
+
+
+
+> Переход на таб Settings
+> 
+> `xcrun simctl openurl booted jumper://io.idevs/settings`
+
+
+
+> Открывает модальное окно и передает в него аргумент `hello-world`
+> 
+> `xcrun simctl openurl booted jumper://io.idevs/todo/hello-world`
+
+
+![ezgif-4-59b7108f97](https://user-images.githubusercontent.com/236311/188562865-cbd4e186-12d8-4a79-814e-b49060e28379.gif)
 
 ## Demo project
 
+Скачайте демо проект из [репозитория](https://github.com/bartleby/Jumper-Demo.git)
 
 
 ## License
+
+
+MIT license. See the [LICENSE file](LICENSE) for details.
