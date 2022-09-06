@@ -76,15 +76,15 @@ extension RootCoordinable {
 }
 
 extension RootCoordinable {
-    func isRoot<Output: Coordinable>(_ route: CoordinableRouteKeyPath<Output>) -> Bool {
+    public func isRoot<Output: Coordinable>(_ route: CoordinableRouteKeyPath<Output>) -> Bool {
         navigation.root?.routeHash == route.hashValue
     }
     
-    func isRoot(_ route: ScreenRouteKeyPath) -> Bool {
+    public func isRoot(_ route: ScreenRouteKeyPath) -> Bool {
         navigation.root?.routeHash == route.hashValue
     }
     
-    func hasRoot<Output: Coordinable>(_ route: CoordinableRouteKeyPath<Output>) -> Output? {
+    public func hasRoot<Output: Coordinable>(_ route: CoordinableRouteKeyPath<Output>) -> Output? {
         if navigation.root?.routeHash == route.hashValue {
             return navigation.root?.coordinator as? Output
         }
