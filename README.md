@@ -184,10 +184,10 @@ final class TabBarCoordinator: TabCoordinable {
 ```
 Here everything is similar to other coordinators, with a small exception, a new argument appears in @Route, to which you must pass TabItem, and in the initialization of the `navigation` property, a list of routes that will be tabs is now passed
 
-* Шаг 1 - Initialize `navigation` with several `Routes` that will be tabs in the tabbar
-* Шаг 2 - Define `Route` by specifying TabItem in the argument
-* Шаг 3 - Define the coordinators for transitions
-* Шаг 4 - Define the methods that will return TabItem's
+* Step 1 - Initialize `navigation` with several `Routes` that will be tabs in the tabbar
+* Step 2 - Define `Route` by specifying TabItem in the argument
+* Step 3 - Define the coordinators for transitions
+* Step 4 - Define the methods that will return TabItem's
 
 #### List of transition methods
 
