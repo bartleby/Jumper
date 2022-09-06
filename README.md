@@ -20,7 +20,7 @@ https://github.com/bartleby/Jumper.git
 ### Coordinators
 
 Jumper из коробки имеет три вида протоколов координатора, которые могут реализовать ваши координаторы:
-> Вы так же можете реализовать свой собственный координатор
+> Вы так же можете реализовать свой собственный координатор, смотрите исходный код.
 
 * `RootCoordinable` - Является контейнером `UIViewController`, отлично подходит для стартовой логикии в вашем приложении.
 * `NavigationCoordinable` - Используется для навигации по стеку
@@ -59,14 +59,14 @@ final class AppCoordinator: RootCoordinable {
 
 * `root(\.someRoute)` Заменяет текущее представлениие или координатор
 * `root(\.someRoute, input: "any type")`
-* `isRoot(\.someRoute)` возвращает булево значение, которое указывает, является ли данный `Route` корневым
-* `hasRoot(\.someRoute)` возвращает корневой координатор или nil если указаный `Route` не является корневым
+* `isRoot(\.someRoute)` Возвращает булево значение, которое указывает, является ли данный `Route` корневым
+* `hasRoot(\.someRoute)` Возвращает корневой координатор или nil если указаный `Route` не является корневым
 * `present(\.someRoute)` Презентует вью или координатор
 * `present(\.someRoute, input: "any type")`
 * `present(\.someRoute, input: "any type", animated: false)`
 * `dismiss()`
 
-В каждый метод перехода вы можете передать аргумент используя поле `input` который будет передан в функциию создания вью/координатора
+В каждый метод перехода вы можете передать аргумент, используя поле `input`, который будет передан в функциию создания вью/координатора
 
 ```swift
 @Route var userList = userListScreen
@@ -106,6 +106,7 @@ final class AuthorizationCoordinator: NavigationCoordinable {
 * `push(\.someRoute)`
 * `push(\.someRoute, input: "any type")`
 * `push(\.someRoute, animated: false)`
+* `push(stack: )` 
 * `pop(\.someRoute)`
 * `pop(\.someRoute, animated: false)`
 * `pop(to: \.someRoute)` переход к указаному `Route`
@@ -117,6 +118,30 @@ final class AuthorizationCoordinator: NavigationCoordinable {
 * `present(\.someRoute, input: "any type", animated: false)`
 * `dismiss()`
 
+используя метод `push(stack:)` вы можете сделать `push` сразу нескольких `Route` в навигейшен стек, при этом анимация будет применена только для последнего перехода
+
+```swift
+coordinator?.push {
+    \SettingsCoordinator.yellow
+    \SettingsCoordinator.green
+    \SettingsCoordinator.green
+    \SettingsCoordinator.green
+    \SettingsCoordinator.yellow
+    \SettingsCoordinator.green
+}
+```
+
+тоже самое вы можете сделать при помощи цепочки `Route`
+
+```swift
+coordinator?
+    .push(\.yellow, animated: false)
+    .push(\.green, animated: false)
+    .push(\.green, animated: false)
+    .push(\.green, animated: false)
+    .push(\.yellow, animated: false)
+    .push(\.green, animated: true)
+```
 
 
 ### TabCoordinable
@@ -273,30 +298,30 @@ coordinator.present(\.notification) \\ вернет NotificationCoordinator
 
 ```swift
 func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
-        appCoordinator.onOpenURL(URLContexts.first?.url)
-    }
+    appCoordinator.onOpenURL(URLContexts.first?.url)
+}
 ```
 
 создайте метод `onOpenURL(url:)` в вашем главном координаторе 
 
 ```swift
 func onOpenURL(_ url: URL?) {
-        guard let url = url else { return }
-        guard let deepLink = try? DeepLink(url: url) else { return }
-        
-        if let coordinator = self.hasRoot(\.home) {
-            switch deepLink {
-            case .todo(let id):
-                coordinator
-                    .focus(\.main)
-                    .present(\.todo, input: id)
-            case .settings:
-                coordinator.focus(\.settings)
-            case .home:
-                coordinator.focus(\.main)
-            }
+    guard let url = url else { return }
+    guard let deepLink = try? DeepLink(url: url) else { return }
+
+    if let coordinator = self.hasRoot(\.home) {
+        switch deepLink {
+        case .todo(let id):
+            coordinator
+                .focus(\.main)
+                .present(\.todo, input: id)
+        case .settings:
+            coordinator.focus(\.settings)
+        case .home:
+            coordinator.focus(\.main)
         }
     }
+}
 ```
 
 Реализацию `DeepLink` вы можете посмотреть в Demo проекте.
