@@ -3,7 +3,7 @@
 import UIKit
 import SwiftUI
 
-public struct Screen<ViewModel>: ScreenViewPresentable {
+public struct Screen<ViewModel> {
     private let screenView: ScreenViewPresentable
     public let viewModel: ViewModel
     
@@ -12,13 +12,15 @@ public struct Screen<ViewModel>: ScreenViewPresentable {
         self.viewModel = viewModel
     }
     
-    public func view() -> ScreenView {
-        screenView.view()
-    }
-    
     public func configure(_ configure: (ViewModel) -> Void) -> Self {
         configure(viewModel)
         return self
+    }
+}
+
+extension Screen: ScreenViewPresentable {
+    public func view() -> ScreenView {
+        return screenView.view()
     }
 }
 
