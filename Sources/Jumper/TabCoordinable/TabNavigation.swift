@@ -6,7 +6,7 @@ public class TabNavigation<T: TabCoordinable> {
     public typealias TabKeyPath = PartialKeyPath<T>
     internal var parent: ChildDismissable?
     internal var children: [ChildContainer] = []
-    var router: TabRouter = TabRouter()
+    public var router: TabRouter = TabRouter()
     internal let initial: [TabKeyPath]
     
     public init(@TabBuilder<TabKeyPath> initial: () -> [TabKeyPath]) {
